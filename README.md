@@ -4,6 +4,7 @@
 ## Installation
 - Setup ```OPENAI_API_KEY``` in .env file
   
+### Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
