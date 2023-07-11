@@ -2,8 +2,8 @@
 - Bot for Adaptive Learning
 
 ## Installation
-- Setup OPENAI_API_KEY in .env file
-- 
+- Setup ```OPENAI_API_KEY``` in .env file
+  
 ```bash
 pip install -r requirements.txt
 ```
