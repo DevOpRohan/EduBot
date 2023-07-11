@@ -31,7 +31,7 @@ class Bot:
         # 3.Run a while loop and add the response as role assitant, and display to user and let the user type then add it in message as role user
         while True:
             completion = await self.llm.chat_completion(
-                model="gpt-3.5-turbo",
+                model="gpt-4",
                 messages=messages,
                 temperature=0,
                 max_tokens=512,
