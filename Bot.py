@@ -1,6 +1,6 @@
 from openAiApi import OpenAIAPI
 from preprocessing import ContentPreprocessor
-from prompts import bot_sys_prompt, bot_prompt, bot_init_prompt2
+from prompts import bot_sys_prompt, bot_prompt, bot_init_prompt2, bot_init_prompt2_exp1, bot_init_prompt2_exp2
 
 
 class Bot:
@@ -24,7 +24,9 @@ class Bot:
             },
             {
                 "role": "user",
-                "content": bot_init_prompt2
+                # "content": bot_init_prompt2
+                # "content": bot_init_prompt2_exp1
+                "content": bot_init_prompt2_exp2
             },
         ]
 
@@ -53,6 +55,6 @@ class Bot:
             messages.append(
                 {
                     "role": "user",
-                    "content": user_input
+                    "content": "STUDENT_RESPONSE:\n" + user_input
                 }
             )
