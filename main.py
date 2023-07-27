@@ -53,6 +53,6 @@ The ratio of the sum of the first 13 terms to the sum of the first 7 terms is
 [(13/2) * (2a + (13-1)d)] / [(7/2) * (2a + (7-1)d)] = [13 * (2a + (13-1) * 2a)] / [7 * (2a + (7-1) * 2a)] = 169/49
 }
 """
-
+language = "Japanese"
 bot = Bot()
-asyncio.run(bot.chat(problem2, solution2))
+asyncio.run(bot.chat(problem2, solution2, language))

@@ -1,5 +1,6 @@
 from openAiApi import OpenAIAPI
-from prompts import bot_sys_prompt, bot_prompt, translator_sys_prompt, translator_prompt
+from prompts import bot_sys_prompt, bot_prompt, translator_sys_prompt, translator_prompt, generalizer_sys_prompt, \
+    generalizer_init_prompt, generalizer_prompt
 
 
 class Bot:
@@ -27,7 +28,7 @@ class Bot:
 
         return res.choices[0].message["content"]
 
-    async def chat(self, problem, solution):
+    async def chat(self, problem, solution, lang="Hindi"):
         # 1. Prepare Initial Messages
         messages = [
             {
@@ -40,8 +41,7 @@ class Bot:
             }
         ]
 
-
-        #2.Run a while loop and add the response as role assitant, and display to user and let the user type then add it in message as role user
+        # 2.Run a while loop and add the response as role assitant, and display to user and let the user type then add it in message as role user
         while True:
             completion = await self.llm.chat_completion(
                 model="gpt-4",
@@ -51,7 +51,7 @@ class Bot:
             )
             response = completion.choices[0].message["content"]
 
-            res = await self.translate(response, "Hindi")
+            res = await self.translate(response, lang)
 
             print("Bot Response:\n")
             print(res)
@@ -74,8 +74,49 @@ class Bot:
                 }
             )
 
+    async def generalizer(self, problem, solution):
+        # 1. Prepare Initial Messages
+        messages = [
+            {
+                "role": "system",
+                "content": generalizer_sys_prompt,
+            },
+            {
+                "role": "user",
+                "content": generalizer_init_prompt,
+            },
+            {
+                "role": "user",
+                "content": generalizer_prompt.format(problem=problem, solution=solution)
+            }
+
+        ]
+
+        # 2 Return the response
+        completion = await self.llm.chat_completion(
+            model="gpt-4",
+            messages=messages,
+            temperature=0,
+            max_tokens=2048,
+        )
+
+        return completion.choices[0].message["content"]
+
+
 # TEST TRANSLATOR #
 # bot = Bot()
 # import asyncio
 # x = asyncio.run(bot.translate("Hello", "Hindi"))
+# print(x)
+
+# Test Generalizer #
+# bot = Bot()
+# import asyncio
+#
+# problem = """"[string(Sophia works at a reputable art gallery. She earns a commission of latex(6\\%) on every artwork she sells. If she sells a painting for latex(\\$764), how much money does Sophia make in commission?)]
+# """
+#
+# solution = """"[string(To find the amount of commission made, use the following formula Commission rate latex(\\times) retail price latex(=) amount of commission made Since the commission rate is a percentage, we have to convert it into a decimal first. So, latex(6 \\%=\\dfrac{6}{100}=0.06)),string(Now, using the formula and substituting the values, we get latex(0.06 \\times \\$ 764=\\$ 45.84)),string(Therefore, the amount of commission Sophia makes by selling a computer is latex(\\$ 45.84).)]
+# """
+# x = asyncio.run(bot.generalizer(problem, solution))
 # print(x)
