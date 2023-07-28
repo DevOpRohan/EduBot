@@ -1,6 +1,5 @@
 from openAiApi import OpenAIAPI
-from prompts import bot_sys_prompt, bot_prompt, translator_sys_prompt, translator_prompt, generalizer_sys_prompt, \
-    generalizer_init_prompt, generalizer_prompt
+from prompts import bot_sys_prompt, bot_prompt, translator_sys_prompt, translator_prompt
 
 
 class Bot:
@@ -54,6 +53,8 @@ class Bot:
             res = await self.translate(response, lang)
 
             print("Bot Response:\n")
+            print(response)
+            print("\nTranslated Response:\n")
             print(res)
 
             # if response contain @conclude then break the loop
@@ -74,33 +75,6 @@ class Bot:
                 }
             )
 
-    async def generalizer(self, problem, solution):
-        # 1. Prepare Initial Messages
-        messages = [
-            {
-                "role": "system",
-                "content": generalizer_sys_prompt,
-            },
-            {
-                "role": "user",
-                "content": generalizer_init_prompt,
-            },
-            {
-                "role": "user",
-                "content": generalizer_prompt.format(problem=problem, solution=solution)
-            }
-
-        ]
-
-        # 2 Return the response
-        completion = await self.llm.chat_completion(
-            model="gpt-4",
-            messages=messages,
-            temperature=0,
-            max_tokens=2048,
-        )
-
-        return completion.choices[0].message["content"]
 
 
 # TEST TRANSLATOR #
