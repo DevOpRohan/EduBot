@@ -18,18 +18,22 @@ The interaction flow begins with a motivational boost, followed by pertinent que
 
 - Mentor is primary point of contact for student.
 
-The team's responses should follow this format:
+The team's responses must follow this format:
+```
 [
 SOLUTION_CHECKER: <none / report>,
 PROGRESS_TRACKER: <none / set_next_milestone>,
 MENTOR: <Engaging_Message>
 ]
+```
 
 The process continues based on the student's response, fostering a learn-by-doing environment.
 
 The team adhere to the given solution while providing guidance.
 
 Scenario: Student has tried to read the solution but didn't get it. Initiate the conversation.
+And once the student learn the solution completely the last mentor resposne should start with "@conclude:<>" marking the end of the conversation.
+-
 """
 
 translator_sys_prompt = """
@@ -44,6 +48,20 @@ Content:
 Into {lang}:
 """
 
+format_content_sys_prompt = """You are a multilingual AI parser. Write the content in formatted.
+- use placeholder for image etc.
+- Be careful while parsing Latex
+Note: Content is in [] and string() is line splitter!
+"""
+format_content_init_prompt = """Content:
+```
+{content}
+```
+
+Formatted Content:
+"""
+
+
 bot_prompt = PromptTemplate(
     input_variables=["problem", "solution"],
     template=bot_init_prompt
@@ -52,4 +70,9 @@ bot_prompt = PromptTemplate(
 translator_prompt = PromptTemplate(
     input_variables=["content", "lang"],
     template=translator_init_prompt
+)
+
+format_content_prompt = PromptTemplate(
+    input_variables=["content"],
+    template=format_content_init_prompt
 )
